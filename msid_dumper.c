@@ -14,21 +14,21 @@ static struct MS {
 };
 
 int main(int args, char *argv[]) {
+	int id = -1;
 	if(argv[1] == NULL) {
 		printf("ERR: Need to specify which disk to use! NOT PARTITION!\n");
 		return 1;
 	}
 	if(argv[2] == NULL) {
-		printf("ERR: Need to know which brand the card is.\nSony, Sandisk, Lexar are exceptable responses.\nThis goes after specifying a disk.\n");
-		return 1;
+		printf("\n\nWARN: No Product name (Sony, Sandisk, Lexar) provided assuming Sony?\n\n");
 	}
-	int id = -1;
-	if(strcasecmp(argv[2], "sandisk")==0)
+	if (!argv[2])
+		id = 0;
+	else if(strcasecmp(argv[2], "sandisk")==0)
 		id = 1;
 	else if(strcasecmp(argv[2], "lexar")==0)
 		id = 2;
-	else
-		id = 0;
+
 	size_t len = 8;
 	size_t bytesRead;
 	unsigned char line[24];
