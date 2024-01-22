@@ -19,5 +19,5 @@ static:
 	@strip $(TARGET)
 
 clean:
-	@rm -f *.o $(TARGET)
+	@rm -f *.o *.bin $(TARGET)
 	@echo Clean

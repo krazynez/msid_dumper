@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
 
 
 static struct MS {
@@ -48,7 +49,17 @@ int main(int args, char *argv[]) {
 		return -1;
 	}
 
-	printf("Searching for '%s' with ID '%s'\n", MemoryStick[id].name, MemoryStick[id].id);
+	time_t start_time, curr_time;
+	start_time = time(NULL);
+
+	char tmp_name[8] = {0};
+	int j = 0;
+	for (int i = 0; i < MemoryStick[id].id[i]; i++) {
+		if(MemoryStick[id].id[i] != ' ')
+			tmp_name[j++] = MemoryStick[id].id[i];
+	}
+
+	printf("Searching for '%s' with ID '%s'\nThis should only take a few seconds...\n", MemoryStick[id].name, tmp_name);
 
 	while((bytesRead = fread(line, 1, sizeof(line), fp)) > 0) {
 		for(size_t i = 0; i < bytesRead - len + 1; i++) {
@@ -65,14 +76,26 @@ int main(int args, char *argv[]) {
 
 				goto cleanup;
 			}
+			curr_time = time(NULL);
+			if(curr_time - start_time > 30) {
+				goto err;
+			}
 		}
 
 	}
 
 	printf("Hmmm why are you here? You shouldn't be here?");
 	return 1;
+err:
+	printf("Took to long to find msid perhaps your Memory Stick is not supported/corrupted?\n");
+	fclose(fp);
+	fclose(f);
+	remove("msid.bin");
+	return 1;
 
 cleanup:
+
+	printf("\n\nFound %s!\nSaving as msid.bin...\n\n", tmp_name);
 
 	fclose(fp);
 	fclose(f);
