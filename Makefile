@@ -5,6 +5,9 @@ OBJ = $(TARGET).o
 
 CFLAGS = -lc
 
+ifeq ($(OS),Windows_NT)
+	CFLAGS += -D_WIN32
+endif
 
 
 all:
@@ -20,5 +23,5 @@ static:
 	@zip -r $(TARGET).zip $(TARGET) README.md
 
 clean:
-	@rm -f *.o *.bin *.zip $(TARGET)
+	@rm -rf *.o *.bin *.zip *.exe prefix $(TARGET)
 	@echo Clean
